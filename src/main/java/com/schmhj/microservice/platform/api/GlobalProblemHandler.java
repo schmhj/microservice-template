@@ -16,7 +16,7 @@ public class GlobalProblemHandler {
     ResponseEntity<ProblemDetail> haResponseEntity(MethodArgumentNotValidException ex) {
         var problemDetail = ProblemDetail.forStatus(HttpStatus.BAD_REQUEST);
         problemDetail.setTitle("Validation Error");
-        problemDetail.setProperty("voilations",
+        problemDetail.setProperty("violations",
                 ex.getBindingResult().getFieldErrors().stream()
                         .map(e -> Map.of("field", e.getField(), "message", e.getDefaultMessage()))
                         .toList());

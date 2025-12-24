@@ -228,7 +228,7 @@ public sealed interface Result<T> permits Result.Success, Result.Error {
      */
     default Result<T> recoverWith(Function<Throwable, Result<T>> recovery) {
         return switch (this) {
-            case Success<T> _ -> this;
+            case Success<T> success -> this;
             case Error<T> error -> recovery.apply(error.error);
         };
     }
