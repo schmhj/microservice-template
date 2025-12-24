@@ -1,0 +1,38 @@
+server:
+  port: ${SERVER_PORT:8080}
+
+spring:
+  application:
+    name: ${SPRING_APPLICATION_NAME:microservice-template}
+  profiles:
+    active: ${ACTIVE_PROFILE:default}
+  datasource:
+    url: ${SPRING_DATASOURCE_URL:jdbc:h2:mem:testdb}
+    username: ${SPRING_DATASOURCE_USERNAME:sa}
+    password: ${SPRING_DATASOURCE_PASSWORD:}
+    driver-class-name: ${SPRING_DATASOURCE_DRIVER_CLASS_NAME:org.h2.Driver}
+    hikari:
+      maximum-pool-size: ${SPRING_DATASOURCE_MAXIMUM_POOL_SIZE:10}
+      minimum-idle: ${SPRING_DATASOURCE_MINIMUM_IDLE:5}
+      idle-timeout: ${SPRING_DATASOURCE_IDLE_TIMEOUT:30000}
+      connection-timeout: ${SPRING_DATASOURCE_CONNECTION_TIMEOUT:30000}
+      pool-name: HikariPool-${SPRING_APPLICATION_NAME}
+      connection-test-query: SELECT 1
+      validation-timeout: ${SPRING_DATASOURCE_VALIDATION_TIMEOUT:3000}
+      
+  jpa:
+    hibernate:
+      ddl-auto: ${SPRING_JPA_HIBERNATE_DDL_AUTO:none}
+
+  sql:
+    init:
+      mode: ${SQL_INIT_MODE:never}
+      platform: ${SQL_INIT_PLATFORM:all}
+
+  flyway:
+    enabled: ${FLYWAY_ENABLED:true}
+    locations: ${FLYWAY_LOCATIONS:classpath:db/migration}
+    baseline-on-migrate: ${FLYWAY_BASELINE_ON_MIGRATE:true}
+    schemas: ${FLYWAY_SCHEMAS:public}
+    table: ${FLYWAY_TABLE:flyway_schema_history}
+    encoding: ${FLYWAY_ENCODING:UTF-8}
