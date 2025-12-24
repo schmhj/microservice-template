@@ -16,7 +16,7 @@ spring:
       minimum-idle: ${SPRING_DATASOURCE_MINIMUM_IDLE:5}
       idle-timeout: ${SPRING_DATASOURCE_IDLE_TIMEOUT:30000}
       connection-timeout: ${SPRING_DATASOURCE_CONNECTION_TIMEOUT:30000}
-      pool-name: HikariPool-${SPRING_APPLICATION_NAME}
+      pool-name: HikariPool-${SPRING_APPLICATION_NAME:microservice}
       connection-test-query: SELECT 1
       validation-timeout: ${SPRING_DATASOURCE_VALIDATION_TIMEOUT:3000}
       
