@@ -26,7 +26,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @WebMvcTest(controllers = GlobalExceptionHandlerTest.TestController.class)
 @ContextConfiguration(classes = Application.class)
 @Import({ GlobalExceptionHandler.class, GlobalExceptionHandlerTest.TestController.class,
-        com.schmhj.microservice.infrastructure.config.SecurityAutoConfiguration.class })
+        com.schmhj.microservice.infrastructure.config.SecurityConfiguration.class })
 class GlobalExceptionHandlerTest {
 
     @Autowired

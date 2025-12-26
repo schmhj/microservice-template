@@ -12,6 +12,7 @@ public class HomeController {
 
     @GetMapping("/")
     public RedirectView home() {
+        log.info("Home Controller");
         return new RedirectView("/actuator/health/liveness");
     }
 

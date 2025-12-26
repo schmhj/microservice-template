@@ -9,7 +9,7 @@ import io.github.resilience4j.circuitbreaker.CircuitBreakerConfig;
 import io.github.resilience4j.retry.RetryConfig;
 
 @Configuration
-public class ResilienceAutoConfiguration {
+public class ResilienceConfiguration {
 
     @Bean
     public CircuitBreakerConfig circuitBreakerConfig() {
