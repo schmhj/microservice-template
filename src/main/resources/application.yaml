@@ -36,3 +36,17 @@ spring:
     schemas: ${FLYWAY_SCHEMAS:public}
     table: ${FLYWAY_TABLE:flyway_schema_history}
     encoding: ${FLYWAY_ENCODING:UTF-8}
+
+  docker:
+    compose:
+      enabled: ${SPRING_DOCKER_COMPOSE_ENABLED:true}
+      file: compose.yaml
+      lifecyclemanagement: start_and_stop
+      readiness:
+        tcp:
+          connect-timeout: ${SPRING_DOCKER_COMPOSE_READINESS_TCP_CONNECT_TIMEOUT:2s}
+          connect-retries: ${SPRING_DOCKER_COMPOSE_READINESS_TCP_CONNECT_RETRIES:3}
+
+springdoc:
+  swagger-ui:
+    enabled: ${SPRINGDOC_SWAGGER_UI_ENABLED:true}

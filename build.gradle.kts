@@ -28,6 +28,7 @@ extra["springCloudVersion"] = "2025.1.0"
 extra["archunitVersion"] = "1.4.1"
 extra["logstashVersion"] = "9.0"
 extra["braveVersion"] = "1.6.1"
+extra["springdocVersion"] = "3.0.0"
 
 dependencies {
 	implementation("org.springframework.boot:spring-boot-h2console")
@@ -37,14 +38,16 @@ dependencies {
 	implementation("org.springframework.boot:spring-boot-starter-security")
 	implementation("org.springframework.boot:spring-boot-starter-webmvc")
 	implementation("org.springframework.boot:spring-boot-starter-validation")
+	implementation("org.flywaydb:flyway-database-postgresql")
 	implementation("org.springframework.cloud:spring-cloud-starter-circuitbreaker-resilience4j")
 	implementation("net.logstash.logback:logstash-logback-encoder:${property("logstashVersion")}")
 	implementation("io.micrometer:micrometer-tracing-bridge-brave:${property("braveVersion")}")
+	implementation("org.springdoc:springdoc-openapi-starter-webmvc-ui:${property("springdocVersion")}")
 
 	compileOnly("org.projectlombok:lombok")
 	developmentOnly("org.springframework.boot:spring-boot-devtools")
-	// developmentOnly("org.springframework.boot:spring-boot-docker-compose")
-	runtimeOnly("com.h2database:h2")
+	developmentOnly("org.springframework.boot:spring-boot-docker-compose")
+	runtimeOnly("org.postgresql:postgresql")
 	annotationProcessor("org.projectlombok:lombok")
 	testImplementation("org.springframework.boot:spring-boot-starter-actuator-test")
 	testImplementation("org.springframework.boot:spring-boot-starter-data-jdbc-test")

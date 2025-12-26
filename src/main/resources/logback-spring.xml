@@ -1,7 +1,10 @@
 <configuration>
-    <property name="LOG_DIR" value="./logs" />
+    <include resource="org/springframework/boot/logging/logback/defaults.xml"/>
+    <include resource="org/springframework/boot/logging/logback/console-appender.xml" />
+    
+    <springProperty scope="context" name="LOG_DIR" source="logging.file.path" defaultValue="./logs"/>
 
-    <appender name="jsonConsole" class="ch.qos.logback.core.ConsoleAppender">
+    <appender name="JsonConsole" class="ch.qos.logback.core.ConsoleAppender">
         <encoder class="net.logstash.logback.encoder.LoggingEventCompositeJsonEncoder">
             <providers>
                 <timestamp/>
@@ -44,8 +47,19 @@
         </rollingPolicy>
     </appender>
 
-    <root level="INFO">
-        <appender-ref ref="jsonConsole"/>
-        <appender-ref ref="RollingFile"/>
-    </root>
+    <!-- Docker / Dev Profile: Use JSON Console -->
+    <springProfile name="dev">
+        <root level="INFO">
+            <appender-ref ref="JsonConsole"/>
+            <appender-ref ref="RollingFile"/>
+        </root>
+    </springProfile>
+
+    <!-- Default / Local Profile: Use Standard Color Console -->
+    <springProfile name="!dev">
+        <root level="INFO">
+            <appender-ref ref="CONSOLE"/> <!-- Spring Boot's default Console Appender -->
+            <appender-ref ref="RollingFile"/>
+        </root>
+    </springProfile>
 </configuration>
