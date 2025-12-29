@@ -21,10 +21,4 @@ public class HomeController {
         return new RedirectView("/swagger-ui/index.html");
     }
 
-    @GetMapping("/test/hello")
-    public String hello() {
-        log.info("Hello Controller");
-        return "Hello World";
-    }
-
 }
