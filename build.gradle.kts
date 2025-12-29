@@ -29,33 +29,42 @@ extra["archunitVersion"] = "1.4.1"
 extra["logstashVersion"] = "9.0"
 extra["braveVersion"] = "1.6.1"
 extra["springdocVersion"] = "3.0.0"
+extra["opentelemetryVersion"] = "2.23.0-alpha"
 
 dependencies {
-	implementation("org.springframework.boot:spring-boot-h2console")
 	implementation("org.springframework.boot:spring-boot-starter-actuator")
 	implementation("org.springframework.boot:spring-boot-starter-data-jdbc")
 	implementation("org.springframework.boot:spring-boot-starter-flyway")
 	implementation("org.springframework.boot:spring-boot-starter-security")
 	implementation("org.springframework.boot:spring-boot-starter-webmvc")
 	implementation("org.springframework.boot:spring-boot-starter-validation")
+	implementation("org.springframework.boot:spring-boot-starter-aspectj")
 	implementation("org.flywaydb:flyway-database-postgresql")
 	implementation("org.springframework.cloud:spring-cloud-starter-circuitbreaker-resilience4j")
 	implementation("net.logstash.logback:logstash-logback-encoder:${property("logstashVersion")}")
 	implementation("io.micrometer:micrometer-tracing-bridge-brave:${property("braveVersion")}")
 	implementation("org.springdoc:springdoc-openapi-starter-webmvc-ui:${property("springdocVersion")}")
-
+	implementation("org.springframework.boot:spring-boot-starter-opentelemetry")
+	implementation("io.opentelemetry.instrumentation:opentelemetry-logback-appender-1.0:${property("opentelemetryVersion")}")
+	
 	compileOnly("org.projectlombok:lombok")
+	annotationProcessor("org.projectlombok:lombok")
+	
 	developmentOnly("org.springframework.boot:spring-boot-devtools")
 	developmentOnly("org.springframework.boot:spring-boot-docker-compose")
+	
 	runtimeOnly("org.postgresql:postgresql")
-	annotationProcessor("org.projectlombok:lombok")
+	
 	testImplementation("org.springframework.boot:spring-boot-starter-actuator-test")
 	testImplementation("org.springframework.boot:spring-boot-starter-data-jdbc-test")
 	testImplementation("org.springframework.boot:spring-boot-starter-flyway-test")
 	testImplementation("org.springframework.boot:spring-boot-starter-security-test")
 	testImplementation("org.springframework.boot:spring-boot-starter-webmvc-test")
-	testRuntimeOnly("org.junit.platform:junit-platform-launcher")
 	testImplementation("com.tngtech.archunit:archunit-junit5:${property("archunitVersion")}")
+	testImplementation("org.springframework.boot:spring-boot-starter-opentelemetry-test")
+
+	testRuntimeOnly("org.junit.platform:junit-platform-launcher")
+	
 }
 
 dependencyManagement {

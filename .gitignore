@@ -41,3 +41,12 @@ out/
 
 ## Logs ###
 logs
+
+## Postgres ###
+postgres_data
+
+## Grafana ###
+grafana_data    
+
+## Prometheus ###
+prometheus_data

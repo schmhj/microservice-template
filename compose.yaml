@@ -11,6 +11,8 @@ services:
       - POSTGRES_DB=postgres
     volumes:
       - ./postgres_data:/var/lib/postgresql/data
+    networks:
+      - internal
 
   app:
     container_name: app
@@ -21,10 +23,33 @@ services:
       - ./logs:/app/logs
     depends_on:
       - postgres
+      - grafana-lgtm
     environment:
-      - SPRING_PROFILES_ACTIVE=dev
+      - SPRING_PROFILES_ACTIVE=docker
       - LOGGING_FILE_PATH=/app/logs
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://postgres:5432/postgres
+      - SPRING_DATASOURCE_USERNAME=postgres
+      - SPRING_DATASOURCE_PASSWORD=postgres
+      - SPRING_MANAGEMENT_OTLP_METRICS_EXPORT_URL=http://grafana-lgtm:4318/v1/metrics
+      - SPRING_MANAGEMENT_OTLP_TRACING_EXPORT_ENDPOINT=http://grafana-lgtm:4318/v1/traces
+      - SPRING_MANAGEMENT_OTLP_LOGGING_EXPORT_ENDPOINT=http://grafana-lgtm:4318/v1/logs
+    networks:
+      - internal
+
+  grafana-lgtm:
+    image: 'grafana/otel-lgtm:latest'
+    ports:
+      - '3000:3000'
+      - '4317:4317'
+      - '4318:4318'
+    networks:
+      - internal
 
 volumes:
   postgres_data:
   logs:
+
+
+networks:
+  internal:
+    driver: bridge
