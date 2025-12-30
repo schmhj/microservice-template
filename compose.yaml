@@ -25,7 +25,7 @@ services:
       - postgres
       - grafana-lgtm
     environment:
-      - SPRING_PROFILES_ACTIVE=docker
+      - SPRING_PROFILES_ACTIVE=dev
       - LOGGING_FILE_PATH=/app/logs
       - SPRING_DATASOURCE_URL=jdbc:postgresql://postgres:5432/postgres
       - SPRING_DATASOURCE_USERNAME=postgres

@@ -7,9 +7,9 @@ replicaCount: 1
 
 # This sets the container image more information can be found here: https://kubernetes.io/docs/concepts/containers/images/
 image:
-  repository: localhost/microservice
+  repository: microservice
   pullPolicy: IfNotPresent
-  tag: "latest"
+  tag: "0.0.1-SNAPSHOT"
 
 # This is for the secrets for pulling an image from a private repository more information can be found here: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
 imagePullSecrets: []
@@ -17,21 +17,20 @@ imagePullSecrets: []
 nameOverride: ""
 fullnameOverride: ""
 
+# This is for setting up the environment variables more information can be found here: https://kubernetes.io/docs/concepts/configuration/secret/
+env:
+  SPRING_PROFILES_ACTIVE: default
+  LOGGING_FILE_PATH: /app/logs
+  SPRING_DATASOURCE_URL: jdbc:h2:mem:testdb
+  SPRING_DATASOURCE_USERNAME: sa
+  SPRING_MANAGEMENT_OTLP_METRICS_EXPORT_URL: http://grafana-lgtm:4318/v1/metrics
+  SPRING_MANAGEMENT_OTLP_TRACING_EXPORT_ENDPOINT: http://grafana-lgtm:4318/v1/traces
+  SPRING_MANAGEMENT_OTLP_LOGGING_EXPORT_ENDPOINT: http://grafana-lgtm:4318/v1/logs
 
-# This is for setting up the application profile more information can be found here: https://docs.spring.io/spring-boot/docs/current/reference/html/features.html#features.external-config.profile-specific-configuration
-appProfile: kubernetes
-
-# This is for setting up the data source more information can be found here: https://docs.spring.io/spring-boot/docs/current/reference/html/features.html#features.external-config.profile-specific-configuration
-dataSource:
-  url: jdbc:postgresql://postgres:5432/postgres
-  username: postgres
-  password: postgres
-
-# This is for setting up OpenTelemetry more information can be found here: https://opentelemetry.io/docs/quickstart/k8s/
-otlp:
-  metricsExportUrl: http://grafana-lgtm:4318/v1/metrics
-  tracingExportEndpoint: http://grafana-lgtm:4318/v1/traces
-  loggingExportEndpoint: http://grafana-lgtm:4318/v1/logs
+# secretEnv:
+#   SPRING_DATASOURCE_PASSWORD:
+#     secretName: db-credentials
+#     key: password
 
 # This is to setup the liveness and readiness probes more information can be found here: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-startup-probes/
 livenessProbe:
@@ -43,12 +42,16 @@ readinessProbe:
     path: /actuator/health/readiness
     port: http
 
+# Container port configuration
+containerPort: 9000
+
 # This is for setting up a service more information can be found here: https://kubernetes.io/docs/concepts/services-networking/service/
 service:
   # This sets the service type more information can be found here: https://kubernetes.io/docs/concepts/services-networking/service/#publishing-services-service-types
   type: ClusterIP
   # This sets the ports more information can be found here: https://kubernetes.io/docs/concepts/services-networking/service/#field-spec-ports
   port: 80
+  targetPort: http
 
 # This section builds out the service account more information can be found here: https://kubernetes.io/docs/concepts/security/service-accounts/
 serviceAccount:
@@ -83,20 +86,22 @@ autoscaling:
   # targetMemoryUtilizationPercentage: 80
 
 # Additional volumes on the output Deployment definition.
-volumes: []
-  # - name: foo
-  #   secret:
-  #     secretName: mysecret
-  #     optional: false
+volumes:
+  - name: logs
+    emptyDir: {}
 
 # Additional volumeMounts on the output Deployment definition.
-volumeMounts: []
-  # - name: foo
-  #   mountPath: "/etc/foo"
-  #   readOnly: true
+volumeMounts:
+  - name: logs
+    mountPath: /app/logs
 
 nodeSelector: {}
 
 tolerations: []
 
 affinity: {}
+
+# Grafana LGTM Distributed (Loki, Grafana, Tempo, Mimir) observability stack
+# This is a subchart dependency that provides a complete distributed observability solution
+# lgtm-distributed:
+#   enabled: true

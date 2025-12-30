@@ -4,9 +4,11 @@ package com.schmhj.microservice.infrastructure.adapter.in.decorator;
 import java.io.IOException;
 import java.util.Optional;
 
+import org.jspecify.annotations.Nullable;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
+import io.micrometer.tracing.TraceContext;
 import io.micrometer.tracing.Tracer;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
@@ -37,5 +39,10 @@ public class TraceIdFilter extends OncePerRequestFilter {
         response.setHeader(TRACE_ID_HEADER, traceId);
 
         filterChain.doFilter(request, response);
+    }
+
+    private @Nullable String getTraceId() {
+        TraceContext context = this.tracer.currentTraceContext().context();
+        return context != null ? context.traceId() : null;
     }
 }

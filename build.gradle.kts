@@ -46,7 +46,8 @@ dependencies {
 	implementation("org.springdoc:springdoc-openapi-starter-webmvc-ui:${property("springdocVersion")}")
 	implementation("org.springframework.boot:spring-boot-starter-opentelemetry")
 	implementation("io.opentelemetry.instrumentation:opentelemetry-logback-appender-1.0:${property("opentelemetryVersion")}")
-	
+	implementation("org.springframework.boot:spring-boot-h2console")
+
 	compileOnly("org.projectlombok:lombok")
 	annotationProcessor("org.projectlombok:lombok")
 	
@@ -54,6 +55,7 @@ dependencies {
 	developmentOnly("org.springframework.boot:spring-boot-docker-compose")
 	
 	runtimeOnly("org.postgresql:postgresql")
+	runtimeOnly("com.h2database:h2")
 	
 	testImplementation("org.springframework.boot:spring-boot-starter-actuator-test")
 	testImplementation("org.springframework.boot:spring-boot-starter-data-jdbc-test")

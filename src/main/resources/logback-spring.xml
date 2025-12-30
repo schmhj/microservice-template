@@ -50,16 +50,7 @@
     <appender name="OTEL" class="io.opentelemetry.instrumentation.logback.appender.v1_0.OpenTelemetryAppender">
     </appender>
 
-    <!-- Docker / Dev Profile: Use JSON Console -->
-    <springProfile name="!dev">
-        <root level="INFO">
-            <appender-ref ref="JsonConsole"/>
-            <appender-ref ref="RollingFile"/>
-            <appender-ref ref="OTEL"/>
-        </root>
-    </springProfile>
-
-    <!-- Default / Local Profile: Use Standard Color Console -->
+     <!-- Default / Local Profile: Use Standard Color Console -->
     <springProfile name="dev">
         <root level="INFO">
             <appender-ref ref="CONSOLE"/> <!-- Spring Boot's default Console Appender -->
@@ -67,4 +58,21 @@
             <appender-ref ref="OTEL"/>
         </root>
     </springProfile>
+
+     <!-- Kubernetes Profile: Use Standard Color Console -->
+    <springProfile name="default">
+        <root level="INFO">
+            <appender-ref ref="CONSOLE"/> <!-- Spring Boot's default Console Appender -->
+        </root>
+    </springProfile>
+
+    <!-- Docker / Dev Profile: Use JSON Console -->
+    <springProfile name="!dev &amp; !default">
+        <root level="INFO">
+            <appender-ref ref="JsonConsole"/>
+            <appender-ref ref="RollingFile"/>
+            <appender-ref ref="OTEL"/>
+        </root>
+    </springProfile>
+
 </configuration>
