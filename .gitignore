@@ -50,3 +50,7 @@ grafana_data
 
 ## Prometheus ###
 prometheus_data
+
+
+## Helm ###
+**/charts/*.tgz
