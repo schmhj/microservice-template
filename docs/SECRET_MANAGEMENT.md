@@ -4,20 +4,20 @@ This guide explains how to automate the management of sensitive credentials like
 
 ## Strategy 1: CI/CD Variable Injection (Current)
 
-This approach uses your CI/CD pipeline (GitHub Actions, GitLab CI, Jenkins) to inject secrets as environment variables during the Helm deployment.
+This approach uses your CI/CD pipeline to inject secrets during deployment. We now use an **Umbrella Chart** (`monitoring-agent`) that bundles both Alloy and its secrets.
 
 ### How it works
-1.  **Store Secrets**: Save your credentials (`MIMIR_USER`, `GRAFANA_TOKEN`, etc.) as "Secret Variables" in your CI/CD platform.
-2.  **Deploy**: Run `helm upgrade --install` and use the `--set` flag to pass these variables from the CI/CD environment into the `alloy-secrets` chart.
+1.  **Umbrella Chart**: The `monitoring-agent` chart includes `grafana/alloy` as a dependency and a local Secret template.
+2.  **Deploy**: Run a single `helm upgrade` command. Override the `secrets.*` values via `--set`.
 
 ### Command Example
 ```bash
-helm upgrade --install alloy-secrets ./helm/alloy-secrets \
+helm upgrade --install monitoring-agent ./helm/monitoring-agent \
   --namespace monitoring \
-  --set mimirUser="$GRAFANA_MIMIR_ID" \
-  --set lokiUser="$GRAFANA_LOKI_ID" \
-  --set tempoUser="$GRAFANA_TEMPO_ID" \
-  --set grafanaToken="$GRAFANA_CLOUD_TOKEN"
+  --set secrets.mimirUser="$GRAFANA_MIMIR_ID" \
+  --set secrets.lokiUser="$GRAFANA_LOKI_ID" \
+  --set secrets.tempoUser="$GRAFANA_TEMPO_ID" \
+  --set secrets.grafanaToken="$GRAFANA_CLOUD_TOKEN"
 ```
 
 ### Pros/Cons

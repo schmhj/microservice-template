@@ -1,6 +1,0 @@
-# Default values for alloy-secrets.
-namespace: monitoring
-mimirUser: ""
-lokiUser: ""
-tempoUser: ""
-grafanaToken: ""
