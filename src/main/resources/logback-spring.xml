@@ -63,6 +63,7 @@
     <springProfile name="default">
         <root level="INFO">
             <appender-ref ref="CONSOLE"/> <!-- Spring Boot's default Console Appender -->
+            <appender-ref ref="OTEL"/>
         </root>
     </springProfile>
 

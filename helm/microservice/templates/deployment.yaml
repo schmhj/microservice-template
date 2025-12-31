@@ -63,7 +63,7 @@ spec:
           env:
             {{- range $key, $value := .Values.env }}
             - name: {{ $key }}
-              value: {{ $value | quote }}
+              value: {{ tpl $value $ | quote }}
             {{- end }}
             {{- range $name, $item := .Values.secretEnv }}
             - name: {{ $name }}

@@ -17,15 +17,19 @@ imagePullSecrets: []
 nameOverride: ""
 fullnameOverride: ""
 
+# Internal K8s service name for Alloy
+otelCollector: "alloy.monitoring.svc.cluster.local"
+
 # This is for setting up the environment variables more information can be found here: https://kubernetes.io/docs/concepts/configuration/secret/
 env:
+  SERVER_PORT: "9000"
   SPRING_PROFILES_ACTIVE: default
   LOGGING_FILE_PATH: /app/logs
   SPRING_DATASOURCE_URL: jdbc:h2:mem:testdb
   SPRING_DATASOURCE_USERNAME: sa
-  SPRING_MANAGEMENT_OTLP_METRICS_EXPORT_URL: http://grafana-lgtm:4318/v1/metrics
-  SPRING_MANAGEMENT_OTLP_TRACING_EXPORT_ENDPOINT: http://grafana-lgtm:4318/v1/traces
-  SPRING_MANAGEMENT_OTLP_LOGGING_EXPORT_ENDPOINT: http://grafana-lgtm:4318/v1/logs
+  SPRING_MANAGEMENT_OTLP_METRICS_EXPORT_URL: http://{{ .Values.otelCollector }}:4318/v1/metrics
+  SPRING_MANAGEMENT_OTLP_TRACING_EXPORT_ENDPOINT: http://{{ .Values.otelCollector }}:4318/v1/traces
+  SPRING_MANAGEMENT_OTLP_LOGGING_EXPORT_ENDPOINT: http://{{ .Values.otelCollector }}:4318/v1/logs
 
 # secretEnv:
 #   SPRING_DATASOURCE_PASSWORD:

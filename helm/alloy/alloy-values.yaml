@@ -1,0 +1,66 @@
+alloy:
+  extraPorts:
+    - name: "otlp-grpc"
+      port: 4317
+      targetPort: 4317
+      protocol: "TCP"
+    - name: "otlp-http"
+      port: 4318
+      targetPort: 4318
+      protocol: "TCP"
+  envFrom:
+    - secretRef:
+        name: grafana-cloud-credentials
+  configMap:
+    create: true
+    content: |
+      // 1. RECEIVE: Accept OTLP from Spring Boot (via GRPC and HTTP)
+      otelcol.receiver.otlp "default" {
+        http { endpoint = "0.0.0.0:4318" }
+        grpc { endpoint = "0.0.0.0:4317" }
+        output {
+          metrics = [otelcol.exporter.prometheus.cloud.input]
+          logs    = [otelcol.exporter.loki.cloud.input]
+          traces  = [otelcol.exporter.otlp.cloud.input]
+        }
+      }
+
+      // 2. EXPORT METRICS: Convert OTLP to Prometheus and send to Mimir
+      otelcol.exporter.prometheus "cloud" {
+        forward_to = [prometheus.remote_write.cloud.receiver]
+      }
+      prometheus.remote_write "cloud" {
+        endpoint {
+          url = "https://prometheus-prod-13-prod-us-east-0.grafana.net/api/prom/push"
+          basic_auth {
+            username = sys.env("MIMIR_USER")
+            password = sys.env("GRAFANA_TOKEN")
+          }
+        }
+      }
+
+      // 3. EXPORT LOGS: Send OTLP logs to Loki
+      otelcol.exporter.loki "cloud" {
+        forward_to = [loki.write.cloud.receiver]
+      }
+      loki.write "cloud" {
+        endpoint {
+          url = "https://logs-prod-006.grafana.net/loki/api/v1/push"
+          basic_auth {
+            username = sys.env("LOKI_USER")
+            password = sys.env("GRAFANA_TOKEN")
+          }
+        }
+      }
+
+      // 4. EXPORT TRACES: Send OTLP traces to Tempo
+      otelcol.exporter.otlp "cloud" {
+        client {
+          endpoint = "tempo-prod-04-prod-us-east-0.grafana.net:443"
+          auth     = otelcol.auth.basic.cloud.handler
+        }
+      }
+      otelcol.auth.basic "cloud" {
+        username = sys.env("TEMPO_USER")
+        password = sys.env("GRAFANA_TOKEN")
+      }
