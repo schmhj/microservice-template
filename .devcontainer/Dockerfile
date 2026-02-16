@@ -15,7 +15,5 @@ RUN usermod -aG sudo ${PROJECT_USER} && echo "${PROJECT_USER} ALL=(ALL) NOPASSWD
 # Create gradle user directory with proper permissions
 RUN mkdir -p /home/${PROJECT_USER}/.gradle && chown -R ${PROJECT_USER}:${PROJECT_USER} /home/${PROJECT_USER}/.gradle
 
-RUN apt-get update && apt-get install -y git-lfs
-
 # Set default user
 USER ${PROJECT_USER}

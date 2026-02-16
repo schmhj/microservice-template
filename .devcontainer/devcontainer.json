@@ -97,5 +97,5 @@
       "onAutoForward": "notify"
     }
   },
-  "postCreateCommand": "mkdir -p $HOME/.gradle && mkdir -p gradle/wrapper && chmod -R 755 gradle && chmod +x gradlew && ./gradlew wrapper --gradle-version 9.2.1 && ./gradlew --version && java -version"
+  "postCreateCommand": "mkdir -p $HOME/.gradle && mkdir -p gradle/wrapper && chmod -R 755 gradle && chmod +x gradlew && ./gradlew wrapper --gradle-version 9.2.1 && ./gradlew --version && java -version && sudo apt-get update && sudo apt-get install -y git-lfs"
 }
