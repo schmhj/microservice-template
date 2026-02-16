@@ -1,0 +1,101 @@
+{
+  "name": "Microservice Template - Java 25",
+  "build": {
+    "dockerfile": "Dockerfile",
+    "context": ".",
+    "args": {
+      "PROJECT_USER": "microservice-template"
+    }
+  },
+  "features": {
+    "ghcr.io/devcontainers/features/docker-in-docker:2": {
+      "version": "latest"
+    },
+    "ghcr.io/devcontainers/features/git:1": {},
+    "ghcr.io/devcontainers/features/github-cli:1": {}
+  },
+  "customizations": {
+    "vscode": {
+      "extensions": [
+        "Extension Pack for Java",
+        "Project Manager for Java",
+        "Visual Studio IntelliCode",
+        "Spring Boot Extension Pack",
+        "Spring Initializr Java Support",
+        "Gradle for Java",
+        "REST Client",
+        "Thunder Client",
+        "Docker",
+        "Kubernetes",
+        "YAML",
+        "Postman",
+        "SonarLint"
+      ],
+      "settings": {
+        "[java]": {
+          "editor.defaultFormatter": "redhat.java",
+          "editor.formatOnSave": true,
+          "editor.codeActionsOnSave": [
+            "source.fixAll.eslint",
+            "source.organizeImports"
+          ]
+        },
+        "redhat.java.intellicode.enabled": true,
+        "java.home": "/usr/local/openjdk-25",
+        "java.jdt.ls.vmargs": "-XX:+UseG1GC -XX:+UseStringDeduplication -Xmx2G -Xms100m",
+        "java.configuration.updateBuildConfiguration": "automatic",
+        "[gradle]": {
+          "editor.defaultFormatter": "naco-swicc.gradle-language",
+          "editor.formatOnSave": true
+        },
+        "gradle.autoDetect": "on",
+        "editor.rulers": [
+          80,
+          120
+        ],
+        "editor.tabSize": 4,
+        "editor.insertSpaces": true,
+        "editor.trimAutoWhitespace": true,
+        "files.trimFinalNewlines": true,
+        "files.trimTrailingWhitespace": true,
+        "editor.formatOnSave": true,
+        "search.exclude": {
+          "**/node_modules": true,
+          "**/build": true,
+          "**/.gradle": true,
+          "**/.git": true
+        },
+        "files.exclude": {
+          "**/.git": true,
+          "**/.gradle": true,
+          "**/build": true,
+          "**/.DS_Store": true
+        },
+        "spring-boot.ls.java.home": "/usr/local/openjdk-25"
+      }
+    }
+  },
+  "containerEnv": {
+    "JAVA_VERSION": "25"
+  },
+  "forwardPorts": [
+    8080,
+    9090,
+    9091
+  ],
+  "portsAttributes": {
+    "8080": {
+      "label": "Application",
+      "onAutoForward": "notify"
+    },
+    "9090": {
+      "label": "Prometheus",
+      "onAutoForward": "notify"
+    },
+    "9091": {
+      "label": "Grafana",
+      "onAutoForward": "notify"
+    }
+  },
+  "postCreateCommand": "mkdir -p $HOME/.gradle && mkdir -p gradle/wrapper && chmod -R 755 gradle && chmod +x gradlew && ./gradlew wrapper --gradle-version 9.2.1 && ./gradlew --version && java -version"
+}
