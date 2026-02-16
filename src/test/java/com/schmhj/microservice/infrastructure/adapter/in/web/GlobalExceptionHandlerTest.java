@@ -1,6 +1,5 @@
 package com.schmhj.microservice.infrastructure.adapter.in.web;
 
-import com.schmhj.microservice.infrastructure.Application;
 import com.schmhj.microservice.infrastructure.adapter.in.rest.GlobalExceptionHandler;
 
 import jakarta.validation.Valid;
@@ -9,33 +8,42 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.webmvc.test.autoconfigure.WebMvcTest;
+import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 import org.springframework.http.MediaType;
-import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import io.micrometer.tracing.Tracer;
+
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import org.springframework.security.test.context.support.WithMockUser;
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 
-@WebMvcTest(controllers = GlobalExceptionHandlerTest.TestController.class)
-@ContextConfiguration(classes = Application.class)
-@Import({ GlobalExceptionHandler.class, GlobalExceptionHandlerTest.TestController.class,
-        com.schmhj.microservice.infrastructure.config.SecurityConfiguration.class })
+@WebMvcTest
+@Import({ GlobalExceptionHandler.class, TestController.class })
+@WithMockUser
 class GlobalExceptionHandlerTest {
 
     @Autowired
     private MockMvc mockMvc;
 
+    @MockitoBean
+    private Tracer tracer;
+
     @Test
     @DisplayName("should return bad request with violations when validation fails")
     void should_return_bad_request_with_violations_when_validation_fails() throws Exception {
         mockMvc.perform(post("/test/validation")
+                .with(csrf())
                 .contentType(MediaType.APPLICATION_JSON)
                 .content("{}"))
                 .andExpect(status().isBadRequest())
@@ -54,19 +62,19 @@ class GlobalExceptionHandlerTest {
                 .andExpect(jsonPath("$.message").value("Something went wrong"));
     }
 
-    @RestController
-    public static class TestController {
+    record TestRequest(@NotNull(message = "must not be null") String name) {
+    }
+}
 
-        @PostMapping("/test/validation")
-        void validation(@Valid @RequestBody TestRequest request) {
-        }
+@RestController
+class TestController {
 
-        @GetMapping("/test/exception")
-        void exception() {
-            throw new RuntimeException("Something went wrong");
-        }
+    @PostMapping("/test/validation")
+    void validation(@Valid @RequestBody GlobalExceptionHandlerTest.TestRequest request) {
     }
 
-    record TestRequest(@NotNull(message = "must not be null") String name) {
+    @GetMapping("/test/exception")
+    void exception() {
+        throw new RuntimeException("Something went wrong");
     }
 }

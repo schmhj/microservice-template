@@ -50,13 +50,13 @@ dependencies {
 
 	compileOnly("org.projectlombok:lombok")
 	annotationProcessor("org.projectlombok:lombok")
-	
+
 	developmentOnly("org.springframework.boot:spring-boot-devtools")
 	developmentOnly("org.springframework.boot:spring-boot-docker-compose")
-	
+
 	runtimeOnly("org.postgresql:postgresql")
 	runtimeOnly("com.h2database:h2")
-	
+
 	testImplementation("org.springframework.boot:spring-boot-starter-actuator-test")
 	testImplementation("org.springframework.boot:spring-boot-starter-data-jdbc-test")
 	testImplementation("org.springframework.boot:spring-boot-starter-flyway-test")
@@ -66,7 +66,7 @@ dependencies {
 	testImplementation("org.springframework.boot:spring-boot-starter-opentelemetry-test")
 
 	testRuntimeOnly("org.junit.platform:junit-platform-launcher")
-	
+
 }
 
 dependencyManagement {
@@ -81,4 +81,5 @@ tasks.withType<Test> {
 		showStandardStreams = true
 		events("passed", "skipped", "failed")
 	}
+	systemProperty("spring.profiles.active", "test")
 }
