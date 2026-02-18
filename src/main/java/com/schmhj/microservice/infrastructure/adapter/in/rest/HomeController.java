@@ -9,6 +9,9 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 
 import lombok.extern.slf4j.Slf4j;
 
+import java.net.InetAddress;
+import java.net.UnknownHostException;
+
 @RestController
 @Slf4j
 @Tag(name = "Home", description = "Home Controller")
@@ -19,6 +22,19 @@ public class HomeController {
     public RedirectView home() {
         log.info("Home Controller");
         return new RedirectView("/swagger-ui/index.html");
+    }
+
+    @GetMapping("/hello")
+    public String hello(){
+        try {
+            InetAddress localhost = InetAddress.getLocalHost();
+            return String.format("Hello from %s (%s)",
+                localhost.getHostName(),
+                localhost.getHostAddress());
+        } catch (UnknownHostException e) {
+            log.error("Unknow host error", e);
+            return "Hello";
+        }
     }
 
 }

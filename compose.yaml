@@ -16,7 +16,7 @@ services:
 
   app:
     container_name: app
-    image: microservice:0.0.1-SNAPSHOT
+    image: microservice:latest
     ports:
       - "8000:8080"
     volumes:

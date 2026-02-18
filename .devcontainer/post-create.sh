@@ -33,6 +33,11 @@ sudo apt-get install -y git-lfs
 echo "Starting to build application..."
 docker build -t microservice .
 
+# Setting postgres_data directory
+echo "Creating postgres_data"
+mkdir -p postgres_data
+chmod -R 755 postgres_data
+
 # Start Docker Compose services
 echo "Starting Docker Compose services (PostgreSQL and Grafana LGTM stack)..."
 docker compose up -d

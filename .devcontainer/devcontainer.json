@@ -79,13 +79,13 @@
     "JAVA_VERSION": "25"
   },
   "forwardPorts": [
-    8080,
+    8000,
     3000,
     5432,
     4318
   ],
   "portsAttributes": {
-    "8080": {
+    "8000": {
       "label": "Application",
       "onAutoForward": "notify"
     },
