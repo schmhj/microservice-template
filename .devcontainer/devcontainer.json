@@ -17,19 +17,22 @@
   "customizations": {
     "vscode": {
       "extensions": [
-        "Extension Pack for Java",
-        "Project Manager for Java",
-        "Visual Studio IntelliCode",
-        "Spring Boot Extension Pack",
-        "Spring Initializr Java Support",
-        "Gradle for Java",
-        "REST Client",
-        "Thunder Client",
-        "Docker",
-        "Kubernetes",
-        "YAML",
-        "Postman",
-        "SonarLint"
+        "vscjava.vscode-java-pack",
+        "vscjava.vscode-java-dependency",
+        "visualstudioexptteam.vscodeintellicode",
+        "vmware.vscode-boot-dev-pack",
+        "vscjava.vscode-spring-initializr",
+        "vscjava.vscode-gradle",
+        "humao.rest-client",
+        "rangav.vscode-thunder-client",
+        "ms-azuretools.vscode-docker",
+        "ms-kubernetes-tools.vscode-kubernetes-tools",
+        "redhat.vscode-yaml",
+        "sonarsource.sonarlint-vscode",
+        "ms-ossdata.vscode-pgsql",
+        "databricks.neon-local-connect",
+        "vmware.vscode-spring-boot",
+        "vscjava.vscode-spring-boot-dashboard"
       ],
       "settings": {
         "[java]": {
