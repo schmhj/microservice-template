@@ -24,7 +24,7 @@ public class HomeController {
         return new RedirectView("/swagger-ui/index.html");
     }
 
-    @GetMapping("/hello")
+    @GetMapping("/test")
     public String hello(){
         try {
             InetAddress localhost = InetAddress.getLocalHost();

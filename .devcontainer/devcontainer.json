@@ -79,14 +79,12 @@
     "JAVA_VERSION": "25"
   },
   "forwardPorts": [
-    8000,
-    3000,
-    5432,
-    4318
+    8080,
+    3000
   ],
   "portsAttributes": {
-    "8000": {
-      "label": "Application",
+    "8080": {
+      "label": "Rest API",
       "onAutoForward": "notify"
     },
     "3000": {

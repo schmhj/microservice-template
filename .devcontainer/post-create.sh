@@ -31,22 +31,22 @@ sudo apt-get install -y git-lfs
 
 # Build application
 echo "Starting to build application..."
-docker build -t microservice .
+sudo docker build -t microservice .
 
 # Setting postgres_data directory
 echo "Creating postgres_data"
-mkdir -p postgres_data
-chmod -R 755 postgres_data
+sudo mkdir -p postgres_data
+sudo chmod -R 755 postgres_data
 
 # Start Docker Compose services
 echo "Starting Docker Compose services (PostgreSQL and Grafana LGTM stack)..."
-docker compose up -d
+sudo docker compose up -d
 
 # Wait for services to be ready
 echo "Waiting for services to start..."
 sleep 10
 
 echo "Checking service status..."
-docker compose ps
+sudo docker compose ps
 
 echo "Post-create setup completed successfully!"
