@@ -107,6 +107,13 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GHCR_ACCESS_TOKEN }}
           WITH_V: true
           DEFAULT_BUMP: patch
+          DEFAULT_TAG: v0.0.1
+
+      # Create and push git tag for the new release
+      - name: Create git tag
+        run: |
+          git tag -a ${{ steps.tag_version.outputs.new_tag }} -m "Release ${{ steps.tag_version.outputs.new_tag }}"
+          git push origin ${{ steps.tag_version.outputs.new_tag }}
 
       # Promote the "SHA" image to "Version" tag without rebuilding (Build Once, Deploy Many)
       - name: Login to GHCR
