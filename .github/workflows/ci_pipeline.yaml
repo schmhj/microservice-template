@@ -109,12 +109,6 @@ jobs:
           DEFAULT_BUMP: patch
           DEFAULT_TAG: v0.0.1
 
-      # # Create and push git tag for the new release
-      # - name: Create git tag
-      #   run: |
-      #     git tag -a ${{ steps.tag_version.outputs.new_tag }} -m "Release ${{ steps.tag_version.outputs.new_tag }}"
-      #     git push origin ${{ steps.tag_version.outputs.new_tag }}
-
       # Promote the "SHA" image to "Version" tag without rebuilding (Build Once, Deploy Many)
       - name: Login to GHCR
         uses: docker/login-action@v3
@@ -126,7 +120,7 @@ jobs:
       - name: Promote Image to Production Tag
         run: |
           IMAGE_NAME=ghcr.io/${{ github.repository }}
-          SOURCE_TAG=sha-${{ github.sha }}
+          SOURCE_TAG=sha-${{ needs.build-and-push.outputs.image_tag }}
           TARGET_TAG=${{ steps.tag_version.outputs.new_tag }}
 
           docker pull $IMAGE_NAME:$SOURCE_TAG
