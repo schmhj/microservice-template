@@ -51,7 +51,7 @@ jobs:
   build-and-push:
     runs-on: ubuntu-latest
     outputs:
-      image-tag: ${{ steps.meta.outputs.version }}
+      image_tag: ${{ steps.meta.outputs.version }}
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
@@ -118,7 +118,7 @@ jobs:
       - name: Promote Image to Production Tag
         run: |
           IMAGE_NAME=ghcr.io/${{ github.repository }}
-          SOURCE_TAG=sha-${{ needs.build-and-push.outputs.image_tag }}
+          SOURCE_TAG=${{ needs.build-and-push.outputs.image_tag }}
           TARGET_TAG=${{ steps.tag_version.outputs.new_tag }}
 
           docker pull $IMAGE_NAME:$SOURCE_TAG
