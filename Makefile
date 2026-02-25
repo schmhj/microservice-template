@@ -1,6 +1,6 @@
 # Variables
 APP_NAME := microservice
-VERSION  := 0.0.1-SNAPSHOT
+VERSION  := latest
 IMAGE_NAME := $(APP_NAME):$(VERSION)
 
 .PHONY: help build-image build-dockerfile clean test run-compose
