@@ -43,9 +43,13 @@ jobs:
       - name: Run linting (Gradle check)
         run: ./gradlew check
 
+      - name: Build with Gradle
+        run: ./gradlew build
+
   build-and-push-dev:
     needs: lint-and-test
     runs-on: ubuntu-latest
+    if: github.event_name == 'push'
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
