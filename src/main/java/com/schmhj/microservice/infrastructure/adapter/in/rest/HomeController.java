@@ -28,7 +28,7 @@ public class HomeController {
     public String hello() {
         try {
             InetAddress localhost = InetAddress.getLocalHost();
-            return String.format("Welcome to Microservice from %s (%s)",
+            return String.format("Welcome from %s (%s)",
                     localhost.getHostName(),
                     localhost.getHostAddress());
         } catch (UnknownHostException e) {
