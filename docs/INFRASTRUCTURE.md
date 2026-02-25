@@ -9,7 +9,8 @@ The project uses Helm to manage Kubernetes resources, located in the `helm/` dir
 ```text
 helm/
 ├── microservice/        # The core application chart
-└── monitoring-agent/   # Umbrella chart for observability (Alloy + Secrets)
+├── monitoring-agent/   # Umbrella chart for observability (Alloy + Secrets)
+└── argocd/             # Umbrella chart for ArgoCD
 ```
 
 ---
@@ -31,6 +32,12 @@ This is an "Umbrella Chart" that bundles multiple components into a single manag
 - **Dependencies**: It depends on the official `grafana/alloy` chart.
 - **Secret Management**: It contains a local `templates/secret.yaml` that manages `grafana-cloud-credentials`.
 - **Purpose**: Consolidating Alloy and its required secrets into one chart ensures that the credentials are always present when Alloy starts, and allows managing the entire observability stack with a single `helm` command.
+
+### 3. `argocd` Chart (Umbrella Chart)
+This chart manages the deployment of ArgoCD.
+
+- **Dependencies**: It depends on the official `argo-projects/argo-cd` chart.
+- **Purpose**: Wraps ArgoCD to provide a consistent management interface and custom configuration for this project's GitOps flows.
 
 ---
 
@@ -56,6 +63,7 @@ This folder contains the actual Kubernetes manifest files (YAML). These files us
 Before working with dependencies, ensure you have the required repositories added:
 ```bash
 helm repo add grafana https://grafana.github.io/helm-charts
+helm repo add argo https://argoproj.github.io/argo-helm
 helm repo update
 ```
 
@@ -84,7 +92,33 @@ helm template monitoring-agent ./helm/monitoring-agent \
   --set secrets.grafanaToken="$SECRET-GRAPFANA-TOKEN"
 ```
 
-### 4. Secret Injection via CI/CD
+### 4. Installing and Accessing ArgoCD
+To install ArgoCD using the umbrella chart:
+```bash
+helm upgrade --install argocd ./helm/argocd \
+  --namespace argocd \
+  --create-namespace
+```
+
+**To access the ArgoCD UI:**
+
+1.  **Check Service & Port-Forward**:
+    ```bash
+    kubectl get svc -n argocd
+    kubectl port-forward -n argocd svc/argocd-server 9090:443
+    ```
+    Now you can access the UI at `https://localhost:9090`.
+
+2.  **Get Initial Admin Password**:
+    ```bash
+    kubectl -n argocd get secret argocd-initial-admin-secret -o jsonpath="{.data.password}" | base64 --decode && echo
+    ```
+
+3.  **Login**:
+    - **Username**: `admin`
+    - **Password**: (The output from the command above)
+
+### 5. Secret Injection via CI/CD
 Never store real credentials in `values.yaml`. Use the `--set` flag in your CI/CD pipeline:
 ```bash
 helm upgrade --install monitoring-agent ./helm/monitoring-agent \
