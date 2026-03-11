@@ -104,7 +104,6 @@ nodeSelector: {}
 tolerations: []
 
 affinity: {}
-
 # Grafana LGTM Distributed (Loki, Grafana, Tempo, Mimir) observability stack
 # This is a subchart dependency that provides a complete distributed observability solution
 # lgtm-distributed:

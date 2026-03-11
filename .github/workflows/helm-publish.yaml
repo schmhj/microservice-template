@@ -1,0 +1,41 @@
+name: Helm Publish (OCI)
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - "charts/**" # Only run if the chart changes
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write # Required to push to GHCR
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Install Helm
+        uses: azure/setup-helm@v4
+
+      - name: Login to GHCR
+        run: |
+          echo "${{ secrets.GITHUB_TOKEN }}" | helm registry login ghcr.io \
+            --username ${{ github.actor }} --password-stdin
+
+      - name: Package and Push
+        run: |
+          # 1. Package the chart into a .tgz
+          helm package charts/microservice
+
+          # 2. Get the filename and version from the generated package
+          CHART_NAME=$(grep '^name:' charts/microservice/Chart.yaml | awk '{print $2}')
+          CHART_VERSION=$(grep '^version:' charts/microservice/Chart.yaml | awk '{print $2}')
+
+          # 3. Push to OCI registry
+          # The URL must be lowercase
+          REPO_OWNER=$(echo "${{ github.repository_owner }}" | tr '[:upper:]' '[:lower:]')
+          helm push ${CHART_NAME}-${CHART_VERSION}.tgz oci://ghcr.io/${REPO_OWNER}/charts
