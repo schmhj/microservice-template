@@ -25,15 +25,15 @@ public class HomeController {
     }
 
     @GetMapping("/test")
-    public String hello(){
+    public String hello() {
         try {
             InetAddress localhost = InetAddress.getLocalHost();
-            return String.format("Hello from %s (%s)",
-                localhost.getHostName(),
-                localhost.getHostAddress());
+            return String.format("Welcome from %s (%s)",
+                    localhost.getHostName(),
+                    localhost.getHostAddress());
         } catch (UnknownHostException e) {
             log.error("Unknow host error", e);
-            return "Hello";
+            return "Welcome to Microservice";
         }
     }
 
