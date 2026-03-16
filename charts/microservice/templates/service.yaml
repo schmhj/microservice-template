@@ -7,16 +7,12 @@ metadata:
 spec:
   type: {{ .Values.service.type }}
   ports:
-    - name: {{ .name | default http }}
-      targetPort: {{ .name | default $values.containerPort }}
-      protocol: {{ $values.protocol | default "TCP" }}
-      {{- if $values.service }}
-      port: {{ $values.service.port | default $values.containerPort }}
-      {{- if $values.service.nodePort }}
-      nodePort: {{ $values.service.nodePort }}
-      {{- end }}
-      {{- else }}
-      port: {{ $values.containerPort }}
+    - name: http
+      port: {{ .Values.service.port | default .Values.containerPort }}
+      targetPort: {{ .Values.service.targetPort | default .Values.containerPort }}
+      protocol: {{ .Values.service.protocol | default "TCP" }}
+      {{- if .Values.service.nodePort }}
+      nodePort: {{ .Values.service.nodePort }}
       {{- end }}
   selector:
     {{- include "microservice.selectorLabels" . | nindent 4 }}
